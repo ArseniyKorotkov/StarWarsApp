@@ -1,4 +1,4 @@
-package by.arsy.starwarsapp
+package by.arsy.starwarsapp.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
