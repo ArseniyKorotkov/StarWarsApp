@@ -1,4 +1,4 @@
-package by.arsy.starwarsapp.app
+package by.arsy.starwarsapp.di.module
 
 import by.arsy.starwarsapp.data.repository.StarWarsRepositoryImpl
 import by.arsy.starwarsapp.data.repository.storage.StarWarsRemoteStorage

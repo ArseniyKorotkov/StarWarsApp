@@ -1,9 +1,9 @@
-package by.arsy.starwarsapp.domain.usecase
+package by.arsy.starwarsapp.domain.usecase.item
 
 import by.arsy.starwarsapp.domain.StarWarsRepository
 import by.arsy.starwarsapp.domain.model.item.Vehicle
 
-class GetVehicle(
+class GetVehicleUseCase(
     private val starWarsRepository: StarWarsRepository
 ) {
 

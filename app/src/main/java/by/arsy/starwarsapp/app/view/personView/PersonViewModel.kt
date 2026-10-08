@@ -2,18 +2,22 @@ package by.arsy.starwarsapp.app.view.personView
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import by.arsy.starwarsapp.domain.StarWarsRepository
 import by.arsy.starwarsapp.domain.model.item.Person
+import by.arsy.starwarsapp.domain.usecase.item.GetFilmUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetPersonUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetSpecieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class PersonViewModel @Inject constructor(
-    private val repository: StarWarsRepository
+    private val getPersonUseCase: GetPersonUseCase,
+    private val getFilmUseCase: GetFilmUseCase,
+    private val getSpecieUseCase: GetSpecieUseCase
 ) : ViewModel() {
 
     private val _person: MutableStateFlow<Person?> = MutableStateFlow(null)
@@ -30,7 +34,7 @@ class PersonViewModel @Inject constructor(
 
     fun getPerson(id: Int) {
         viewModelScope.launch(context = Dispatchers.IO) {
-            _person.value = repository.getPerson(id = id)
+            _person.value = getPersonUseCase.execute(id = id)
         }
     }
 
@@ -39,7 +43,7 @@ class PersonViewModel @Inject constructor(
     fun getFilms() {
         getDetails(
             detailIdList = _person.value?.filmIdList,
-            onGetDetail = { repository.getFilm(id = it).title },
+            onGetDetail = { getFilmUseCase.execute(id = it).title },
             onUpdateState = { _filmList.value = it }
         )
     }
@@ -47,7 +51,7 @@ class PersonViewModel @Inject constructor(
     fun getSpecies() {
         getDetails(
             detailIdList = _person.value?.specieIdList,
-            onGetDetail = { repository.getSpecie(id = it).name },
+            onGetDetail = { getSpecieUseCase.execute(id = it).name },
             onUpdateState = { _specieList.value = it }
         )
     }

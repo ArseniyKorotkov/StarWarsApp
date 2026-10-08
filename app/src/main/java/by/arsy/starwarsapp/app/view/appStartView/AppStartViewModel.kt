@@ -3,8 +3,13 @@ package by.arsy.starwarsapp.app.view.appStartView
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import by.arsy.starwarsapp.domain.StarWarsRepository
 import by.arsy.starwarsapp.domain.model.item.Item
+import by.arsy.starwarsapp.domain.usecase.page.GetFilmPageUseCase
+import by.arsy.starwarsapp.domain.usecase.page.GetPersonPageUseCase
+import by.arsy.starwarsapp.domain.usecase.page.GetPlanetPageUseCase
+import by.arsy.starwarsapp.domain.usecase.page.GetSpeciePageUseCase
+import by.arsy.starwarsapp.domain.usecase.page.GetStarshipPageUseCase
+import by.arsy.starwarsapp.domain.usecase.page.GetVehiclePageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +19,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppStartViewModel @Inject constructor(
-    private val repository: StarWarsRepository
+    private val getFilmPageUseCase: GetFilmPageUseCase,
+    private val getPersonPageUseCase: GetPersonPageUseCase,
+    private val getPlanetPageUseCase: GetPlanetPageUseCase,
+    private val getSpeciePageUseCase: GetSpeciePageUseCase,
+    private val getStarshipPageUseCase: GetStarshipPageUseCase,
+    private val getVehiclePageUseCase: GetVehiclePageUseCase
 ) : ViewModel() {
 
     private lateinit var itemType: ItemType
@@ -34,12 +44,12 @@ class AppStartViewModel @Inject constructor(
         viewModelScope.launch(context = Dispatchers.IO) {
             try {
                 _itemList.value = when (itemType) {
-                    ItemType.Film -> repository.getFilmPage(page = page).results
-                    ItemType.Person -> repository.getPersonPage(page = page).results
-                    ItemType.Planet -> repository.getPlanetPage(page = page).results
-                    ItemType.Specie -> repository.getSpeciePage(page = page).results
-                    ItemType.Starship -> repository.getStarshipPage(page = page).results
-                    ItemType.Vehicle -> repository.getVehiclePage(page = page).results
+                    ItemType.Film -> getFilmPageUseCase.execute(page = page).results
+                    ItemType.Person -> getPersonPageUseCase.execute(page = page).results
+                    ItemType.Planet -> getPlanetPageUseCase.execute(page = page).results
+                    ItemType.Specie -> getSpeciePageUseCase.execute(page = page).results
+                    ItemType.Starship -> getStarshipPageUseCase.execute(page = page).results
+                    ItemType.Vehicle -> getVehiclePageUseCase.execute(page = page).results
                 }
             } catch (e : Exception) {
                 Log.e("AppStartViewModel", e.message, e)
