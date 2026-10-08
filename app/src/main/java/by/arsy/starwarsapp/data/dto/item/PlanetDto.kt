@@ -1,17 +1,23 @@
-package by.arsy.starwarsapp.data.dto
+package by.arsy.starwarsapp.data.dto.item
 
 import by.arsy.starwarsapp.data.util.parseUslToId
-import by.arsy.starwarsapp.domain.model.Planet
+import by.arsy.starwarsapp.domain.model.item.Planet
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.time.Instant
 
+@Serializable
 data class PlanetDto(
     val name: String,
+    @SerialName("rotation_period")
     val rotationPeriod: String,
+    @SerialName("orbital_period")
     val orbitalPeriod: String,
     val diameter: String,
     val climate: String,
     val gravity: String,
     val terrain: String,
+    @SerialName("surface_water")
     val surfaceWater: String,
     val population: String,
     val residents: List<String>,

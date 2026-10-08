@@ -1,0 +1,29 @@
+package by.arsy.starwarsapp.app
+
+import by.arsy.starwarsapp.data.repository.StarWarsRepositoryImpl
+import by.arsy.starwarsapp.data.repository.storage.StarWarsRemoteStorage
+import by.arsy.starwarsapp.domain.StarWarsRepository
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideStarWarsRepository(
+        remoteStorage: StarWarsRemoteStorage
+    ): StarWarsRepository {
+        return StarWarsRepositoryImpl(starWarsRemoteStorage = remoteStorage)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStarWarsRemoteStorage(): StarWarsRemoteStorage {
+        return StarWarsRemoteStorage()
+    }
+}

@@ -1,10 +1,10 @@
-package by.arsy.starwarsapp.domain.model
+package by.arsy.starwarsapp.domain.model.item
 
 import java.time.Instant
 
-data class Person (
-    val id: Int,
-    val name: String,
+data class Person(
+    override val id: Int,
+    override val name: String,
     val height: Int,
     val mass: Int,
     val hairColor: String,
@@ -19,4 +19,4 @@ data class Person (
     val starshipIdList: List<Int>,
     val created: Instant,
     val edited: Instant,
-)
+) : Item()

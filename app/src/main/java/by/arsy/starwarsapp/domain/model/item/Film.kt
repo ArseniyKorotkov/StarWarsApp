@@ -1,9 +1,9 @@
-package by.arsy.starwarsapp.domain.model
+package by.arsy.starwarsapp.domain.model.item
 
 import java.time.Instant
 
-data class Film (
-    val id: Int,
+data class Film(
+    override val id: Int,
     val title: String,
     val episodeId: Int,
     val openingCrawl: String,
@@ -17,4 +17,6 @@ data class Film (
     val specieIdList: List<Int>,
     val created: Instant,
     val edited: Instant,
-)
+) : Item() {
+    override val name: String get() = title
+}

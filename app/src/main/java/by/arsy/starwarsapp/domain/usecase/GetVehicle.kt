@@ -1,7 +1,7 @@
 package by.arsy.starwarsapp.domain.usecase
 
 import by.arsy.starwarsapp.domain.StarWarsRepository
-import by.arsy.starwarsapp.domain.model.Vehicle
+import by.arsy.starwarsapp.domain.model.item.Vehicle
 
 class GetVehicle(
     private val starWarsRepository: StarWarsRepository

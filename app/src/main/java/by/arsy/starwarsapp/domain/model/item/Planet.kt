@@ -1,10 +1,10 @@
-package by.arsy.starwarsapp.domain.model
+package by.arsy.starwarsapp.domain.model.item
 
 import java.time.Instant
 
-data class Planet (
-    val id: Int,
-    val name: String,
+data class Planet(
+    override val id: Int,
+    override val name: String,
     val rotationPeriod: Int,
     val orbitalPeriod: Int,
     val diameter: Int,
@@ -17,4 +17,4 @@ data class Planet (
     val filmIdList: List<Int>,
     val created: Instant,
     val edited: Instant,
-)
+) : Item()

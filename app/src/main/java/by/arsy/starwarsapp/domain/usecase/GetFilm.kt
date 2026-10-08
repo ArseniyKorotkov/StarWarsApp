@@ -1,7 +1,7 @@
 package by.arsy.starwarsapp.domain.usecase
 
 import by.arsy.starwarsapp.domain.StarWarsRepository
-import by.arsy.starwarsapp.domain.model.Film
+import by.arsy.starwarsapp.domain.model.item.Film
 
 class GetFilm(
     private val starWarsRepository: StarWarsRepository

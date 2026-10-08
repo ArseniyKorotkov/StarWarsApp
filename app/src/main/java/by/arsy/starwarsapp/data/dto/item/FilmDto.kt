@@ -1,15 +1,21 @@
-package by.arsy.starwarsapp.data.dto
+package by.arsy.starwarsapp.data.dto.item
 
 import by.arsy.starwarsapp.data.util.parseUslToId
-import by.arsy.starwarsapp.domain.model.Film
+import by.arsy.starwarsapp.domain.model.item.Film
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.time.Instant
 
+@Serializable
 data class FilmDto(
     val title: String,
+    @SerialName("episode_id")
     val episodeId: Int,
+    @SerialName("opening_crawl")
     val openingCrawl: String,
     val director: String,
     val producer: String,
+    @SerialName("release_date")
     val releaseDate: String,
     val characters: List<String>,
     val planets: List<String>,
