@@ -33,8 +33,8 @@ data class PersonDto(
     fun map(): Person = Person(
         id = this.url.parseUslToId(),
         name = this.name,
-        height = this.height.toInt(),
-        mass = this.mass.toInt(),
+        height = this.height,
+        mass = this.mass,
         hairColor = this.hairColor,
         skinColor = this.skinColor,
         eyeColor = this.eyeColor,

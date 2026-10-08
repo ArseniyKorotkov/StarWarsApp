@@ -21,7 +21,7 @@ data class SpecieDto(
     val eyeColors: String,
     @SerialName("average_lifespan")
     val averageLifespan: String,
-    val homeworld: String,
+    val homeworld: String?,
     val language: String,
     val people: List<String>,
     val films: List<String>,
@@ -40,7 +40,7 @@ data class SpecieDto(
         hairColors = this.hairColors,
         eyeColors = this.eyeColors,
         averageLifespan = this.averageLifespan,
-        homeworld = this.homeworld.parseUslToId(),
+        homeworld = this.homeworld?.parseUslToId(),
         language = this.language,
         personIdList = this.people.map { it.parseUslToId() },
         filmIdList = this.films.map { it.parseUslToId() },

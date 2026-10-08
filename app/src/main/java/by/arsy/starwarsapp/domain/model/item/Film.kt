@@ -9,7 +9,7 @@ data class Film(
     val openingCrawl: String,
     val director: String,
     val producer: String,
-    val releaseDate: Instant,
+    val releaseDate: String,
     val characters: List<Int>,
     val planetIdList: List<Int>,
     val starshipIdList: List<Int>,

@@ -12,7 +12,7 @@ data class Specie(
     val hairColors: String,
     val eyeColors: String,
     val averageLifespan: String,
-    val homeworld: Int,
+    val homeworld: Int?,
     val language: String,
     val personIdList: List<Int>,
     val filmIdList: List<Int>,

@@ -34,7 +34,7 @@ data class FilmDto(
         openingCrawl = this.openingCrawl,
         director = this.director,
         producer = this.producer,
-        releaseDate = Instant.parse( /* text = */ this.releaseDate),
+        releaseDate = this.releaseDate,
         characters = this.characters.map { it.parseUslToId() },
         planetIdList = this.planets.map { it.parseUslToId() },
         starshipIdList = this.starships.map { it.parseUslToId() },
