@@ -1,5 +1,6 @@
 package by.arsy.starwarsapp.app.view.personView
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import by.arsy.starwarsapp.app.component.Dropdown
 import by.arsy.starwarsapp.domain.model.item.Person
 
@@ -23,8 +25,11 @@ fun Person(
     val rememberScrollState = rememberScrollState()
     val filmList by viewModel.filmList.collectAsState()
     val specieList by viewModel.specieList.collectAsState()
+    val isFilmListLoadedState by viewModel.isFilmListLoadedState.collectAsState()
+    val isSpecieListLoadedState by viewModel.isSpecieListLoadedState.collectAsState()
 
     Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier.verticalScroll(rememberScrollState)
     ) {
         Text(text = "name: ${person.name}")
@@ -39,17 +44,21 @@ fun Person(
 
         Dropdown(
             header = "films",
+            onClick = { viewModel.getFilms(itemIdList = person.filmIdList) },
             variables = person.filmIdList,
-            variableText = { id -> filmList.firstOrNull{ it.id == id }?.name ?: "Loading..." },
-            onClick = { onFilmClick.invoke(it) },
+            variableText = { id -> filmList.first { it.id == id }.name },
+            isLoadedState = isFilmListLoadedState,
+            onItemClick = { onFilmClick.invoke(it) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Dropdown(
             header = "species",
+            onClick = { viewModel.getSpecies(itemIdList = person.specieIdList) },
             variables = person.specieIdList,
-            variableText = { id -> specieList.firstOrNull{ it.id == id }?.name ?: "Loading..." },
-            onClick = { onSpecieClick.invoke(it) },
+            variableText = { id -> specieList.first { it.id == id }.name },
+            isLoadedState = isSpecieListLoadedState,
+            onItemClick = { onSpecieClick.invoke(it) },
             modifier = Modifier.fillMaxWidth()
         )
 

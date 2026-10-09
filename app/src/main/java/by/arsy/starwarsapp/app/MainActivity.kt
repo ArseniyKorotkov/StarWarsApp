@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                                         route = "${appStartViewModel.getCurrentItemTypeName()}/$it"
                                     )
                                 },
-                                modifier = Modifier.padding(innerPadding)
+                                modifier = Modifier.padding(paddingValues = innerPadding)
                             )
                         }
 
@@ -73,7 +73,8 @@ class MainActivity : ComponentActivity() {
                                 person = itemList.first { it.id == itemId.toInt() } as Person,
                                 onFilmClick = {},
                                 onSpecieClick = {},
-                                viewModel = hiltViewModel()
+                                viewModel = hiltViewModel(),
+                                modifier = Modifier.padding(paddingValues = innerPadding)
                             )
                         }
                     }

@@ -5,10 +5,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -31,36 +31,43 @@ fun Dropdown(
     header: String,
     variables: List<Int>,
     variableText: (Int) -> String,
-    onClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    isLoadedState: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    onItemClick: (Int) -> Unit
 ) {
 
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     val degrees by animateFloatAsState(
-        targetValue = if (isExpanded) 0f else 180f
+        targetValue = if (isExpanded) 180f else 0f
     )
 
     Column(
         modifier = modifier.fillMaxWidth()
-
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { isExpanded = !isExpanded }
+                .clickable {
+                    onClick.invoke()
+                    isExpanded = !isExpanded
+                }
         ) {
             Text(
                 text = "$header: ${variables.size}",
                 modifier = Modifier.weight(1f)
             )
-            Icon(
-                painter = painterResource(id = R.drawable.down_arrow),
-                contentDescription = null,
-                modifier = Modifier
-                    .rotate(degrees)
-                    .size(30.dp)
-            )
+
+            if (variables.isNotEmpty()) {
+                Icon(
+                    painter = painterResource(id = R.drawable.down_arrow),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .rotate(degrees)
+                        .size(30.dp)
+                )
+            }
         }
 
 
@@ -69,15 +76,23 @@ fun Dropdown(
             enter = expandVertically(),
             exit = shrinkVertically()
         ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                variables.forEach {
-                    Text(
-                        text = variableText.invoke(it),
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .clickable { onClick.invoke(it) }
-                    )
+            if (isLoadedState) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 18.dp)
+                ) {
+                    variables.forEach {
+                        Text(
+                            text = variableText.invoke(it),
+                            fontSize = 20.sp,
+                            modifier = Modifier
+                                .clickable { onItemClick.invoke(it) }
+                        )
+                    }
                 }
+            } else {
+                Text("Loading...")
             }
         }
 
@@ -91,6 +106,7 @@ private fun DropdownPreview() {
         header = "Drop me",
         variables = listOf(1, 2, 3),
         variableText = { "Number: $it" },
-        onClick = {}
+        isLoadedState = true,
+        onItemClick = {}
     )
 }
