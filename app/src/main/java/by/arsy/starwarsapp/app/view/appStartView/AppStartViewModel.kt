@@ -40,6 +40,8 @@ class AppStartViewModel @Inject constructor(
         getItems(page = 1)
     }
 
+    fun getCurrentItemTypeName(): String = itemType.name
+
     fun getItems(page: Int) {
         viewModelScope.launch(context = Dispatchers.IO) {
             try {
@@ -51,7 +53,7 @@ class AppStartViewModel @Inject constructor(
                     ItemType.Starship -> getStarshipPageUseCase.execute(page = page).results
                     ItemType.Vehicle -> getVehiclePageUseCase.execute(page = page).results
                 }
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 Log.e("AppStartViewModel", e.message, e)
             }
         }

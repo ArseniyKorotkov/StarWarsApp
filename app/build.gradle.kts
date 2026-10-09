@@ -41,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.okhttp)

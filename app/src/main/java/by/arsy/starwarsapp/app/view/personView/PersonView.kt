@@ -6,6 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import by.arsy.starwarsapp.app.component.Dropdown
 import by.arsy.starwarsapp.domain.model.item.Person
@@ -14,9 +16,13 @@ import by.arsy.starwarsapp.domain.model.item.Person
 fun Person(
     person: Person,
     viewModel: PersonViewModel,
+    onFilmClick: (Int) -> Unit,
+    onSpecieClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val rememberScrollState = rememberScrollState()
+    val filmList by viewModel.filmList.collectAsState()
+    val specieList by viewModel.specieList.collectAsState()
 
     Column(
         modifier = modifier.verticalScroll(rememberScrollState)
@@ -34,10 +40,19 @@ fun Person(
         Dropdown(
             header = "films",
             variables = person.filmIdList,
-            variableText = { "" },
-            onClick = {},
+            variableText = { id -> filmList.firstOrNull{ it.id == id }?.name ?: "Loading..." },
+            onClick = { onFilmClick.invoke(it) },
             modifier = Modifier.fillMaxWidth()
         )
+
+        Dropdown(
+            header = "species",
+            variables = person.specieIdList,
+            variableText = { id -> specieList.firstOrNull{ it.id == id }?.name ?: "Loading..." },
+            onClick = { onSpecieClick.invoke(it) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Text(text = "filmIdList: ${person.filmIdList}")
         Text(text = "specieIdList: ${person.specieIdList}")
         Text(text = "vehicleIdList: ${person.vehicleIdList}")
