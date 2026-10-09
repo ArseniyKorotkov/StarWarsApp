@@ -1,4 +1,4 @@
-package by.arsy.starwarsapp.app.view.personView
+package by.arsy.starwarsapp.app.view.itemView.personView
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +15,14 @@ import by.arsy.starwarsapp.app.component.Dropdown
 import by.arsy.starwarsapp.domain.model.item.Person
 
 @Composable
-fun Person(
+fun PersonScreen(
     person: Person,
     viewModel: PersonViewModel,
-    onFilmClick: (Int) -> Unit,
-    onSpecieClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFilmClick: (Int) -> Unit = {},
+    onSpecieClick: (Int) -> Unit = {},
+    onVehicleClick: (Int) -> Unit = {},
+    onStarshipClick: (Int) -> Unit = {}
 ) {
     val rememberScrollState = rememberScrollState()
     val personState by viewModel.personState.collectAsState()
@@ -71,7 +73,7 @@ fun Person(
             variables = person.vehicleIdList,
             variableText = { id -> personState.vehicleList.first { it.id == id }.name },
             isLoadedState = personState.isVehicleListLoadedState,
-            onItemClick = { onSpecieClick.invoke(it) },
+            onItemClick = { onVehicleClick.invoke(it) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -83,7 +85,7 @@ fun Person(
             variables = person.starshipIdList,
             variableText = { id -> personState.starshipList.first { it.id == id }.name },
             isLoadedState = personState.isStarshipListLoadedState,
-            onItemClick = { onSpecieClick.invoke(it) },
+            onItemClick = { onStarshipClick.invoke(it) },
             modifier = Modifier.fillMaxWidth()
         )
 

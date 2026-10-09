@@ -1,4 +1,4 @@
-package by.arsy.starwarsapp.app.view.personView
+package by.arsy.starwarsapp.app.view.itemView.personView
 
 sealed interface PersonIntent {
     class GetFilms(val itemIdList: List<Int>) : PersonIntent

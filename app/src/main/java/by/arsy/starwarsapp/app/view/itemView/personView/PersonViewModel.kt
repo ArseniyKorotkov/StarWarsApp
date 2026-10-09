@@ -1,21 +1,14 @@
-package by.arsy.starwarsapp.app.view.personView
+package by.arsy.starwarsapp.app.view.itemView.personView
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import by.arsy.starwarsapp.domain.model.item.Film
-import by.arsy.starwarsapp.domain.model.item.Item
-import by.arsy.starwarsapp.domain.model.item.Specie
-import by.arsy.starwarsapp.domain.model.item.Starship
-import by.arsy.starwarsapp.domain.model.item.Vehicle
+import by.arsy.starwarsapp.app.view.itemView.getDetails
 import by.arsy.starwarsapp.domain.usecase.item.GetFilmUseCase
 import by.arsy.starwarsapp.domain.usecase.item.GetSpecieUseCase
 import by.arsy.starwarsapp.domain.usecase.item.GetStarshipUseCase
 import by.arsy.starwarsapp.domain.usecase.item.GetVehicleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,7 +38,7 @@ class PersonViewModel @Inject constructor(
             onGetDetail = { getFilmUseCase.execute(id = it) },
             onUpdateState = {
                 _personState.value = _personState.value.copy(
-                    filmList = it as List<Film>,
+                    filmList = it,
                     isFilmListLoadedState = it.size == itemIdList.size
                 )
             }
@@ -59,7 +52,7 @@ class PersonViewModel @Inject constructor(
             onGetDetail = { getSpecieUseCase.execute(id = it) },
             onUpdateState = {
                 _personState.value = _personState.value.copy(
-                    specieList = it as List<Specie>,
+                    specieList = it,
                     isSpecieListLoadedState = it.size == itemIdList.size
                 )
             }
@@ -73,7 +66,7 @@ class PersonViewModel @Inject constructor(
             onGetDetail = { getVehicleUseCase.execute(id = it) },
             onUpdateState = {
                 _personState.value = _personState.value.copy(
-                    vehicleList = it as List<Vehicle>,
+                    vehicleList = it,
                     isVehicleListLoadedState = it.size == itemIdList.size
                 )
             }
@@ -87,26 +80,11 @@ class PersonViewModel @Inject constructor(
             onGetDetail = { getStarshipUseCase.execute(id = it) },
             onUpdateState = {
                 _personState.value = _personState.value.copy(
-                    starshipList = it as List<Starship>,
+                    starshipList = it,
                     isStarshipListLoadedState = it.size == itemIdList.size
                 )
             }
         )
     }
-
-    private fun getDetails(
-        detailIdList: List<Int>?,
-        onGetDetail: suspend (Int) -> Item,
-        onUpdateState: (List<Item>) -> Unit
-    ) {
-        viewModelScope.launch(context = Dispatchers.IO) {
-            val details = mutableListOf<Item>()
-            detailIdList?.forEach {
-                details.add(onGetDetail(it))
-            }
-            onUpdateState.invoke(details)
-        }
-    }
-
 
 }

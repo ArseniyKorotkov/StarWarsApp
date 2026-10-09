@@ -1,4 +1,4 @@
-package by.arsy.starwarsapp.app.view.personView
+package by.arsy.starwarsapp.app.view.itemView.personView
 
 import by.arsy.starwarsapp.domain.model.item.Film
 import by.arsy.starwarsapp.domain.model.item.Specie
