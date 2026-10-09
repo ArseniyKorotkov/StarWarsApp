@@ -23,10 +23,7 @@ fun Person(
     modifier: Modifier = Modifier
 ) {
     val rememberScrollState = rememberScrollState()
-    val filmList by viewModel.filmList.collectAsState()
-    val specieList by viewModel.specieList.collectAsState()
-    val isFilmListLoadedState by viewModel.isFilmListLoadedState.collectAsState()
-    val isSpecieListLoadedState by viewModel.isSpecieListLoadedState.collectAsState()
+    val personState by viewModel.personState.collectAsState()
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -44,27 +41,51 @@ fun Person(
 
         Dropdown(
             header = "films",
-            onClick = { viewModel.getFilms(itemIdList = person.filmIdList) },
+            onClick = {
+                viewModel.handleIntent(PersonIntent.GetFilms(itemIdList = person.filmIdList))
+            },
             variables = person.filmIdList,
-            variableText = { id -> filmList.first { it.id == id }.name },
-            isLoadedState = isFilmListLoadedState,
+            variableText = { id -> personState.filmList.first { it.id == id }.name },
+            isLoadedState = personState.isFilmListLoadedState,
             onItemClick = { onFilmClick.invoke(it) },
             modifier = Modifier.fillMaxWidth()
         )
 
         Dropdown(
             header = "species",
-            onClick = { viewModel.getSpecies(itemIdList = person.specieIdList) },
+            onClick = {
+                viewModel.handleIntent(PersonIntent.GetSpecies(itemIdList = person.specieIdList))
+            },
             variables = person.specieIdList,
-            variableText = { id -> specieList.first { it.id == id }.name },
-            isLoadedState = isSpecieListLoadedState,
+            variableText = { id -> personState.specieList.first { it.id == id }.name },
+            isLoadedState = personState.isSpecieListLoadedState,
             onItemClick = { onSpecieClick.invoke(it) },
             modifier = Modifier.fillMaxWidth()
         )
 
-        Text(text = "filmIdList: ${person.filmIdList}")
-        Text(text = "specieIdList: ${person.specieIdList}")
-        Text(text = "vehicleIdList: ${person.vehicleIdList}")
-        Text(text = "starshipIdList: ${person.starshipIdList}")
+        Dropdown(
+            header = "vehicles",
+            onClick = {
+                viewModel.handleIntent(PersonIntent.GetVehicles(itemIdList = person.vehicleIdList))
+            },
+            variables = person.vehicleIdList,
+            variableText = { id -> personState.vehicleList.first { it.id == id }.name },
+            isLoadedState = personState.isVehicleListLoadedState,
+            onItemClick = { onSpecieClick.invoke(it) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Dropdown(
+            header = "starships",
+            onClick = {
+                viewModel.handleIntent(PersonIntent.GetStarships(itemIdList = person.starshipIdList))
+            },
+            variables = person.starshipIdList,
+            variableText = { id -> personState.starshipList.first { it.id == id }.name },
+            isLoadedState = personState.isStarshipListLoadedState,
+            onItemClick = { onSpecieClick.invoke(it) },
+            modifier = Modifier.fillMaxWidth()
+        )
+
     }
 }

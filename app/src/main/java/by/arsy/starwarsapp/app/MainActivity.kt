@@ -8,15 +8,15 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import by.arsy.starwarsapp.app.view.appStartView.AppStartIntent
 import by.arsy.starwarsapp.app.view.appStartView.AppStartView
 import by.arsy.starwarsapp.app.view.appStartView.AppStartViewModel
 import by.arsy.starwarsapp.app.view.personView.Person
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            val itemList by appStartViewModel.itemList.collectAsState()
+            val appStartState by appStartViewModel.appStartState.collectAsState()
 
             StarWarsAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -48,13 +48,27 @@ class MainActivity : ComponentActivity() {
                                 itemTypeList = AppStartViewModel.ItemType.entries.map { it.name },
                                 onItemTypeClick = {
                                     val type = AppStartViewModel.ItemType.valueOf(it)
-                                    appStartViewModel.setItemType(itemType = type)
+                                    appStartViewModel.handleIntent(
+                                        AppStartIntent.DownloadPage(
+                                            page = 1,
+                                            type = type
+                                        )
+                                    )
                                 },
-                                itemIdList = itemList.map { it.id },
-                                getItemName = { id -> itemList.first { it.id == id }.name },
+                                itemIdList = appStartState.currentPage.map { it.id },
+                                getItemName = { id ->
+                                    appStartState.currentPage.first { it.id == id }.name
+                                },
                                 onItemNameClick = {
+                                    val type = appStartState.currentType
+                                    appStartViewModel.handleIntent(
+                                        intent = AppStartIntent.DownloadItem(
+                                            id = it,
+                                            type = type
+                                        )
+                                    )
                                     navController.navigate(
-                                        route = "${appStartViewModel.getCurrentItemTypeName()}/$it"
+                                        route = "${type.name}/$it"
                                     )
                                 },
                                 modifier = Modifier.padding(paddingValues = innerPadding)
@@ -63,19 +77,21 @@ class MainActivity : ComponentActivity() {
 
                         composable(
                             route = "${AppStartViewModel.ItemType.Person.name}/{$ITEM_ID}",
-                            arguments = listOf(navArgument(name = ITEM_ID) {
-                                type = NavType.StringType
-                            })
-                        ) { backStackEntry ->
-                            val itemId = backStackEntry.arguments?.getString(/* key = */ ITEM_ID)!!
-
-                            Person(
-                                person = itemList.first { it.id == itemId.toInt() } as Person,
-                                onFilmClick = {},
-                                onSpecieClick = {},
-                                viewModel = hiltViewModel(),
-                                modifier = Modifier.padding(paddingValues = innerPadding)
-                            )
+                        ) {
+                            if (appStartState.isCurrentItemLoaded) {
+                                Person(
+                                    person = appStartState.currentItem as Person,
+                                    onFilmClick = {},
+                                    onSpecieClick = {},
+                                    viewModel = hiltViewModel(),
+                                    modifier = Modifier.padding(paddingValues = innerPadding)
+                                )
+                            } else {
+                                Text(
+                                    text = "Loading...",
+                                    modifier = Modifier.padding(paddingValues = innerPadding)
+                                )
+                            }
                         }
                     }
 

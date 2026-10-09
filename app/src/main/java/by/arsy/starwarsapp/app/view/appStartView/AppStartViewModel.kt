@@ -3,7 +3,12 @@ package by.arsy.starwarsapp.app.view.appStartView
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import by.arsy.starwarsapp.domain.model.item.Item
+import by.arsy.starwarsapp.domain.usecase.item.GetFilmUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetPersonUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetPlanetUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetSpecieUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetStarshipUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetVehicleUseCase
 import by.arsy.starwarsapp.domain.usecase.page.GetFilmPageUseCase
 import by.arsy.starwarsapp.domain.usecase.page.GetPersonPageUseCase
 import by.arsy.starwarsapp.domain.usecase.page.GetPlanetPageUseCase
@@ -24,28 +29,80 @@ class AppStartViewModel @Inject constructor(
     private val getPlanetPageUseCase: GetPlanetPageUseCase,
     private val getSpeciePageUseCase: GetSpeciePageUseCase,
     private val getStarshipPageUseCase: GetStarshipPageUseCase,
-    private val getVehiclePageUseCase: GetVehiclePageUseCase
+    private val getVehiclePageUseCase: GetVehiclePageUseCase,
+    private val getFilmUseCase: GetFilmUseCase,
+    private val getPersonUseCase: GetPersonUseCase,
+    private val getPlanetUseCase: GetPlanetUseCase,
+    private val getSpecieUseCase: GetSpecieUseCase,
+    private val getStarshipUseCase: GetStarshipUseCase,
+    private val getVehicleUseCase: GetVehicleUseCase
 ) : ViewModel() {
 
-    private lateinit var itemType: ItemType
-    private val _itemList = MutableStateFlow<List<Item>>(value = emptyList())
-    val itemList = _itemList.asStateFlow()
+    private val _appStartState = MutableStateFlow(AppStartState())
+
+    val appStartState = _appStartState.asStateFlow()
 
     init {
-        setItemType(itemType = ItemType.Person)
+        handleIntent(
+            intent = AppStartIntent.DownloadPage(
+                page = 1,
+                type = _appStartState.value.currentType
+            )
+        )
     }
 
-    fun setItemType(itemType: ItemType) {
-        this.itemType = itemType
-        getItems(page = 1)
+    fun handleIntent(intent: AppStartIntent) {
+        when (intent) {
+            is AppStartIntent.DownloadItem -> downloadItem(
+                itemId = intent.id,
+                type = intent.type
+            )
+            is AppStartIntent.DownloadPage -> {
+                downloadPageItems(
+                    page = intent.page,
+                    type = intent.type
+                )
+            }
+        }
     }
 
-    fun getCurrentItemTypeName(): String = itemType.name
+    private fun downloadItem(
+        itemId: Int,
+        type: ItemType
+    ) {
+        _appStartState.value = _appStartState.value.copy(
+            isCurrentItemLoaded = false
+        )
 
-    fun getItems(page: Int) {
+        viewModelScope.launch(context = Dispatchers.IO) {
+            val item = when (type) {
+                ItemType.Film -> getFilmUseCase.execute(id = itemId)
+                ItemType.Person -> getPersonUseCase.execute(id = itemId)
+                ItemType.Planet -> getPlanetUseCase.execute(id = itemId)
+                ItemType.Specie -> getSpecieUseCase.execute(id = itemId)
+                ItemType.Starship -> getStarshipUseCase.execute(id = itemId)
+                ItemType.Vehicle -> getVehicleUseCase.execute(id = itemId)
+            }
+
+            _appStartState.value = _appStartState.value.copy(
+                currentType = type,
+                currentItem = item,
+                isCurrentItemLoaded = true
+            )
+        }
+    }
+
+    private fun downloadPageItems(
+        page: Int,
+        type: ItemType
+    ) {
+        _appStartState.value = _appStartState.value.copy(
+            isCurrentPageLoaded = false
+        )
+
         viewModelScope.launch(context = Dispatchers.IO) {
             try {
-                _itemList.value = when (itemType) {
+                val pageContent = when (type) {
                     ItemType.Film -> getFilmPageUseCase.execute(page = page).results
                     ItemType.Person -> getPersonPageUseCase.execute(page = page).results
                     ItemType.Planet -> getPlanetPageUseCase.execute(page = page).results
@@ -53,6 +110,12 @@ class AppStartViewModel @Inject constructor(
                     ItemType.Starship -> getStarshipPageUseCase.execute(page = page).results
                     ItemType.Vehicle -> getVehiclePageUseCase.execute(page = page).results
                 }
+
+                _appStartState.value = _appStartState.value.copy(
+                    currentType = type,
+                    currentPage = pageContent,
+                    isCurrentPageLoaded = true
+                )
             } catch (e: Exception) {
                 Log.e("AppStartViewModel", e.message, e)
             }

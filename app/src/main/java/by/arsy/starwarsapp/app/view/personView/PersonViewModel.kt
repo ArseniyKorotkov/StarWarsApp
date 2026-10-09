@@ -5,8 +5,12 @@ import androidx.lifecycle.viewModelScope
 import by.arsy.starwarsapp.domain.model.item.Film
 import by.arsy.starwarsapp.domain.model.item.Item
 import by.arsy.starwarsapp.domain.model.item.Specie
+import by.arsy.starwarsapp.domain.model.item.Starship
+import by.arsy.starwarsapp.domain.model.item.Vehicle
 import by.arsy.starwarsapp.domain.usecase.item.GetFilmUseCase
 import by.arsy.starwarsapp.domain.usecase.item.GetSpecieUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetStarshipUseCase
+import by.arsy.starwarsapp.domain.usecase.item.GetVehicleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,39 +21,75 @@ import javax.inject.Inject
 @HiltViewModel
 class PersonViewModel @Inject constructor(
     private val getFilmUseCase: GetFilmUseCase,
-    private val getSpecieUseCase: GetSpecieUseCase
+    private val getSpecieUseCase: GetSpecieUseCase,
+    private val getVehicleUseCase: GetVehicleUseCase,
+    private val getStarshipUseCase: GetStarshipUseCase,
 ) : ViewModel() {
 
-    private val _filmList: MutableStateFlow<List<Film>> = MutableStateFlow(emptyList())
-    val filmList = _filmList.asStateFlow()
-    private val _specieList: MutableStateFlow<List<Specie>> = MutableStateFlow(emptyList())
-    val specieList = _specieList.asStateFlow()
-    private val _isFilmListLoadedState: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isFilmListLoadedState = _isFilmListLoadedState.asStateFlow()
-    private val _isSpecieListLoadedState: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isSpecieListLoadedState = _isSpecieListLoadedState.asStateFlow()
+    private val _personState = MutableStateFlow(PersonState())
+    val personState = _personState.asStateFlow()
 
+    fun handleIntent(intent: PersonIntent) {
+        when (intent) {
+            is PersonIntent.GetFilms -> getFilms(itemIdList = intent.itemIdList)
+            is PersonIntent.GetSpecies -> getSpecies(itemIdList = intent.itemIdList)
+            is PersonIntent.GetVehicles -> getVehicles(itemIdList = intent.itemIdList)
+            is PersonIntent.GetStarships -> getStarships(itemIdList = intent.itemIdList)
+        }
+    }
 
-    fun getFilms(itemIdList: List<Int>) {
-        if (_filmList.value.size == itemIdList.size) return
+    private fun getFilms(itemIdList: List<Int>) {
+        if (_personState.value.filmList.size == itemIdList.size) return
         getDetails(
             detailIdList = itemIdList,
             onGetDetail = { getFilmUseCase.execute(id = it) },
             onUpdateState = {
-                _filmList.value = it as List<Film>
-                _isFilmListLoadedState.value = it.size == itemIdList.size
+                _personState.value = _personState.value.copy(
+                    filmList = it as List<Film>,
+                    isFilmListLoadedState = it.size == itemIdList.size
+                )
             }
         )
     }
 
-    fun getSpecies(itemIdList: List<Int>) {
-        if (_specieList.value.size == itemIdList.size) return
+    private fun getSpecies(itemIdList: List<Int>) {
+        if (_personState.value.specieList.size == itemIdList.size) return
         getDetails(
             detailIdList = itemIdList,
             onGetDetail = { getSpecieUseCase.execute(id = it) },
             onUpdateState = {
-                _specieList.value = it as List<Specie>
-                _isSpecieListLoadedState.value = it.size == itemIdList.size
+                _personState.value = _personState.value.copy(
+                    specieList = it as List<Specie>,
+                    isSpecieListLoadedState = it.size == itemIdList.size
+                )
+            }
+        )
+    }
+
+    private fun getVehicles(itemIdList: List<Int>) {
+        if (_personState.value.vehicleList.size == itemIdList.size) return
+        getDetails(
+            detailIdList = itemIdList,
+            onGetDetail = { getVehicleUseCase.execute(id = it) },
+            onUpdateState = {
+                _personState.value = _personState.value.copy(
+                    vehicleList = it as List<Vehicle>,
+                    isVehicleListLoadedState = it.size == itemIdList.size
+                )
+            }
+        )
+    }
+
+    private fun getStarships(itemIdList: List<Int>) {
+        if (_personState.value.starshipList.size == itemIdList.size) return
+        getDetails(
+            detailIdList = itemIdList,
+            onGetDetail = { getStarshipUseCase.execute(id = it) },
+            onUpdateState = {
+                _personState.value = _personState.value.copy(
+                    starshipList = it as List<Starship>,
+                    isStarshipListLoadedState = it.size == itemIdList.size
+                )
             }
         )
     }
