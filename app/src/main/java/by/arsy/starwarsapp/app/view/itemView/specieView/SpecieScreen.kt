@@ -1,5 +1,6 @@
 package by.arsy.starwarsapp.app.view.itemView.specieView
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,10 +21,15 @@ fun SpecieScreen(
     viewModel: SpecieViewModel,
     modifier: Modifier = Modifier,
     onPersonClick: (Int) -> Unit = {},
-    onFilmClick: (Int) -> Unit = {}
+    onFilmClick: (Int) -> Unit = {},
+    onBackClick: () -> Unit
 ) {
     val rememberScrollState = rememberScrollState()
     val specieState by viewModel.specieState.collectAsState()
+
+    BackHandler(enabled = true) {
+        onBackClick.invoke()
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),

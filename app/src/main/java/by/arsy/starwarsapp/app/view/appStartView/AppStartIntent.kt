@@ -11,4 +11,6 @@ sealed interface AppStartIntent {
         val page: Int,
         val type: AppStartViewModel.ItemType
     ) : AppStartIntent
+
+    data object PopItemTypeBackStack : AppStartIntent
 }

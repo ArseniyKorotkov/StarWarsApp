@@ -1,5 +1,6 @@
 package by.arsy.starwarsapp.app.view.itemView.planetView
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,10 +21,15 @@ fun PlanetScreen(
     viewModel: PlanetViewModel,
     modifier: Modifier = Modifier,
     onResidentClick: (Int) -> Unit = {},
-    onFilmClick: (Int) -> Unit = {}
+    onFilmClick: (Int) -> Unit = {},
+    onBackClick: () -> Unit
 ) {
     val rememberScrollState = rememberScrollState()
     val planetState by viewModel.planetState.collectAsState()
+
+    BackHandler(enabled = true) {
+        onBackClick.invoke()
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),

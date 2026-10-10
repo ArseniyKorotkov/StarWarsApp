@@ -1,5 +1,6 @@
 package by.arsy.starwarsapp.app.view.itemView.filmView
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,10 +24,15 @@ fun FilmScreen(
     onPlanetClick: (Int) -> Unit = {},
     onStarshipClick: (Int) -> Unit = {},
     onVehicleClick: (Int) -> Unit = {},
-    onSpecieClick: (Int) -> Unit = {}
+    onSpecieClick: (Int) -> Unit = {},
+    onBackClick: () -> Unit
 ) {
     val rememberScrollState = rememberScrollState()
     val filmState by viewModel.filmState.collectAsState()
+
+    BackHandler(enabled = true) {
+        onBackClick.invoke()
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),

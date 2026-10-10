@@ -46,7 +46,7 @@ class AppStartViewModel @Inject constructor(
         handleIntent(
             intent = AppStartIntent.DownloadPage(
                 page = 1,
-                type = _appStartState.value.currentType
+                type = _appStartState.value.currentPageType
             )
         )
     }
@@ -63,6 +63,8 @@ class AppStartViewModel @Inject constructor(
                     type = intent.type
                 )
             }
+
+            AppStartIntent.PopItemTypeBackStack -> _appStartState.value.itemBackStack.removeLastOrNull()
         }
     }
 
@@ -84,9 +86,8 @@ class AppStartViewModel @Inject constructor(
                 ItemType.Vehicle -> getVehicleUseCase.execute(id = itemId)
             }
 
+            _appStartState.value.itemBackStack.add(item)
             _appStartState.value = _appStartState.value.copy(
-                currentType = type,
-                currentItem = item,
                 isCurrentItemLoaded = true
             )
         }
@@ -112,7 +113,7 @@ class AppStartViewModel @Inject constructor(
                 }
 
                 _appStartState.value = _appStartState.value.copy(
-                    currentType = type,
+                    currentPageType = type,
                     currentPage = pageContent,
                     isCurrentPageLoaded = true
                 )

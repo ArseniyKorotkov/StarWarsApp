@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                                 onItemNameClick = {
                                     navigateItem(
                                         id = it,
-                                        type = appStartState.currentType,
+                                        type = appStartState.currentPageType,
                                         navController = navController
                                     )
                                 },
@@ -84,11 +84,10 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "${AppStartViewModel.ItemType.Film.name}/{$ITEM_ID}",
                         ) {
-                            val isCurrent =
-                                appStartState.currentType == AppStartViewModel.ItemType.Film
+                            val isCurrent = appStartState.itemBackStack.lastOrNull() is Film
                             if (appStartState.isCurrentItemLoaded && isCurrent) {
                                 FilmScreen(
-                                    film = appStartState.currentItem as Film,
+                                    film = appStartState.itemBackStack.last() as Film,
                                     onPersonClick = {
                                         navigateItem(
                                             id = it,
@@ -125,6 +124,10 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     viewModel = hiltViewModel(),
+                                    onBackClick = {
+                                        appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
+                                        navController.popBackStack()
+                                    },
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
@@ -138,11 +141,10 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "${AppStartViewModel.ItemType.Person.name}/{$ITEM_ID}",
                         ) {
-                            val isCurrent =
-                                appStartState.currentType == AppStartViewModel.ItemType.Person
+                            val isCurrent = appStartState.itemBackStack.lastOrNull() is Person
                             if (appStartState.isCurrentItemLoaded && isCurrent) {
                                 PersonScreen(
-                                    person = appStartState.currentItem as Person,
+                                    person = appStartState.itemBackStack.last() as Person,
                                     onFilmClick = {
                                         navigateItem(
                                             id = it,
@@ -172,6 +174,10 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     viewModel = hiltViewModel(),
+                                    onBackClick = {
+                                        appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
+                                        navController.popBackStack()
+                                    },
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
@@ -185,11 +191,10 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "${AppStartViewModel.ItemType.Planet.name}/{$ITEM_ID}"
                         ) {
-                            val isCurrent =
-                                appStartState.currentType == AppStartViewModel.ItemType.Planet
+                            val isCurrent = appStartState.itemBackStack.lastOrNull() is Planet
                             if (appStartState.isCurrentItemLoaded && isCurrent) {
                                 PlanetScreen(
-                                    planet = appStartState.currentItem as Planet,
+                                    planet = appStartState.itemBackStack.last() as Planet,
                                     onResidentClick = {
                                         navigateItem(
                                             id = it,
@@ -205,6 +210,10 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     viewModel = hiltViewModel(),
+                                    onBackClick = {
+                                        appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
+                                        navController.popBackStack()
+                                    },
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
@@ -218,11 +227,10 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "${AppStartViewModel.ItemType.Specie.name}/{$ITEM_ID}"
                         ) {
-                            val isCurrent =
-                                appStartState.currentType == AppStartViewModel.ItemType.Specie
+                            val isCurrent = appStartState.itemBackStack.lastOrNull() is Specie
                             if (appStartState.isCurrentItemLoaded && isCurrent) {
                                 SpecieScreen(
-                                    specie = appStartState.currentItem as Specie,
+                                    specie = appStartState.itemBackStack.last() as Specie,
                                     onPersonClick = {
                                         navigateItem(
                                             id = it,
@@ -238,6 +246,10 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     viewModel = hiltViewModel(),
+                                    onBackClick = {
+                                        appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
+                                        navController.popBackStack()
+                                    },
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
@@ -251,11 +263,10 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "${AppStartViewModel.ItemType.Starship.name}/{$ITEM_ID}"
                         ) {
-                            val isCurrent =
-                                appStartState.currentType == AppStartViewModel.ItemType.Starship
+                            val isCurrent = appStartState.itemBackStack.lastOrNull() is Starship
                             if (appStartState.isCurrentItemLoaded && isCurrent) {
                                 StarshipScreen(
-                                    starship = appStartState.currentItem as Starship,
+                                    starship = appStartState.itemBackStack.last() as Starship,
                                     onPilotClick = {
                                         navigateItem(
                                             id = it,
@@ -271,6 +282,10 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     viewModel = hiltViewModel(),
+                                    onBackClick = {
+                                        appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
+                                        navController.popBackStack()
+                                    },
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
@@ -284,11 +299,10 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "${AppStartViewModel.ItemType.Vehicle.name}/{$ITEM_ID}"
                         ) {
-                            val isCurrent =
-                                appStartState.currentType == AppStartViewModel.ItemType.Vehicle
+                            val isCurrent = appStartState.itemBackStack.lastOrNull() is Vehicle
                             if (appStartState.isCurrentItemLoaded && isCurrent) {
                                 VehicleScreen(
-                                    vehicle = appStartState.currentItem as Vehicle,
+                                    vehicle = appStartState.itemBackStack.last() as Vehicle,
                                     onPilotClick = {
                                         navigateItem(
                                             id = it,
@@ -304,6 +318,10 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     viewModel = hiltViewModel(),
+                                    onBackClick = {
+                                        appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
+                                        navController.popBackStack()
+                                    },
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {

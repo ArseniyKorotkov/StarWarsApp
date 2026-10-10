@@ -1,5 +1,6 @@
 package by.arsy.starwarsapp.app.view.itemView.personView
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,10 +23,15 @@ fun PersonScreen(
     onFilmClick: (Int) -> Unit = {},
     onSpecieClick: (Int) -> Unit = {},
     onVehicleClick: (Int) -> Unit = {},
-    onStarshipClick: (Int) -> Unit = {}
+    onStarshipClick: (Int) -> Unit = {},
+    onBackClick: () -> Unit
 ) {
     val rememberScrollState = rememberScrollState()
     val personState by viewModel.personState.collectAsState()
+
+    BackHandler(enabled = true) {
+        onBackClick.invoke()
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
