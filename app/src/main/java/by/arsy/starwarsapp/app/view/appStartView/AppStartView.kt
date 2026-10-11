@@ -10,10 +10,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -28,6 +32,7 @@ fun AppStartView(
     modifier: Modifier = Modifier
 ) {
     val appStartState by viewModel.appStartState.collectAsState()
+    var searchText by rememberSaveable { mutableStateOf("") }
     val itemListState = rememberLazyListState()
 
     LaunchedEffect(
@@ -41,6 +46,14 @@ fun AppStartView(
 
 
     Column(modifier = modifier) {
+        TextField(
+            value = searchText,
+            onValueChange = { searchText = it },
+            placeholder = { Text(text = "Search...") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
         LazyRow(modifier = Modifier.fillMaxWidth()) {
             items(itemTypeList) {
                 Button(
@@ -56,10 +69,13 @@ fun AppStartView(
             state = itemListState,
         ) {
             items(itemIdList) {
-                Text(
-                    text = getItemName.invoke(it),
-                    modifier = Modifier.clickable { onItemNameClick.invoke(it) }
-                )
+                val itemName = getItemName.invoke(it)
+                if (itemName.contains(other = searchText, ignoreCase = true)) {
+                    Text(
+                        text = itemName,
+                        modifier = Modifier.clickable { onItemNameClick.invoke(it) }
+                    )
+                }
             }
 
             item {
