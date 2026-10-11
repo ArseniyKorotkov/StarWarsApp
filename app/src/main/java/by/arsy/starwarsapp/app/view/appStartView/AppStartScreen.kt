@@ -4,10 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import by.arsy.starwarsapp.app.view.appStartView.component.LoadingComponent
 
 @Composable
-fun AppStartView(
+fun AppStartScreen(
     itemTypeList: List<String>,
     onItemTypeClick: (String) -> Unit,
     itemIdList: List<Int>,
@@ -34,19 +34,8 @@ fun AppStartView(
 ) {
     val appStartState by viewModel.appStartState.collectAsState()
     var searchText by rememberSaveable { mutableStateOf("") }
-    val itemListState = rememberLazyListState()
 
-    LaunchedEffect(
-        key1 = appStartState,
-        key2 = itemListState.canScrollForward
-    ) {
-        if (!itemListState.canScrollForward && !appStartState.currentPageState.isPageLast) {
-            viewModel.handleIntent(AppStartIntent.DownloadNextPage)
-        }
-    }
-
-
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(horizontal = 8.dp)) {
         TextField(
             value = searchText,
             onValueChange = { searchText = it },
@@ -67,7 +56,7 @@ fun AppStartView(
         }
 
         LazyColumn(
-            state = itemListState,
+            modifier = Modifier.fillMaxWidth()
         ) {
             items(itemIdList) {
                 val itemName = getItemName.invoke(it)
@@ -80,6 +69,11 @@ fun AppStartView(
             }
 
             item {
+                LaunchedEffect(key1 = itemIdList.size) {
+                    if (!appStartState.currentPageState.isPageLast) {
+                        viewModel.handleIntent(AppStartIntent.DownloadNextPage)
+                    }
+                }
                 if (!appStartState.currentPageState.isPageLast) {
                     LoadingComponent(modifier = Modifier.fillMaxWidth())
                 }

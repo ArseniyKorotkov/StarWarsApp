@@ -18,7 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import by.arsy.starwarsapp.app.view.appStartView.AppStartIntent
-import by.arsy.starwarsapp.app.view.appStartView.AppStartView
+import by.arsy.starwarsapp.app.view.appStartView.AppStartScreen
 import by.arsy.starwarsapp.app.view.appStartView.AppStartViewModel
 import by.arsy.starwarsapp.app.view.appStartView.component.LoadingComponent
 import by.arsy.starwarsapp.app.view.itemView.filmView.FilmScreen
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = "startView"
                     ) {
                         composable("startView") {
-                            AppStartView(
+                            AppStartScreen(
                                 itemTypeList = AppStartViewModel.ItemType.entries.map { it.name },
                                 onItemTypeClick = {
                                     val type = AppStartViewModel.ItemType.valueOf(it)
