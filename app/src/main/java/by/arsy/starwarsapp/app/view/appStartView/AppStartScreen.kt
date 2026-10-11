@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -35,7 +34,7 @@ fun AppStartScreen(
     val appStartState by viewModel.appStartState.collectAsState()
     var searchText by rememberSaveable { mutableStateOf("") }
 
-    Column(modifier = modifier.padding(horizontal = 8.dp)) {
+    Column(modifier = modifier) {
         TextField(
             value = searchText,
             onValueChange = { searchText = it },

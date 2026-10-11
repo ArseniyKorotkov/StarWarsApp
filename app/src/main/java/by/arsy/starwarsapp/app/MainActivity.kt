@@ -8,10 +8,10 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -51,6 +51,10 @@ class MainActivity : ComponentActivity() {
 
             StarWarsAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    val composableModifier = Modifier
+                        .padding(paddingValues = innerPadding)
+                        .padding(horizontal = 8.dp)
+
                     NavHost(
                         navController = navController,
                         startDestination = "startView"
@@ -78,7 +82,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 },
                                 viewModel = appStartViewModel,
-                                modifier = Modifier.padding(paddingValues = innerPadding)
+                                modifier = composableModifier
                             )
                         }
 
@@ -129,7 +133,7 @@ class MainActivity : ComponentActivity() {
                                         appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
                                         navController.popBackStack()
                                     },
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
+                                    modifier = composableModifier
                                 )
                             } else {
                                 LoadingComponent(modifier = Modifier.fillMaxSize())
@@ -176,7 +180,7 @@ class MainActivity : ComponentActivity() {
                                         appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
                                         navController.popBackStack()
                                     },
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
+                                    modifier = composableModifier
                                 )
                             } else {
                                 LoadingComponent(modifier = Modifier.fillMaxSize())
@@ -209,7 +213,7 @@ class MainActivity : ComponentActivity() {
                                         appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
                                         navController.popBackStack()
                                     },
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
+                                    modifier = composableModifier
                                 )
                             } else {
                                 LoadingComponent(modifier = Modifier.fillMaxSize())
@@ -242,7 +246,7 @@ class MainActivity : ComponentActivity() {
                                         appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
                                         navController.popBackStack()
                                     },
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
+                                    modifier = composableModifier
                                 )
                             } else {
                                 LoadingComponent(modifier = Modifier.fillMaxSize())
@@ -275,7 +279,7 @@ class MainActivity : ComponentActivity() {
                                         appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
                                         navController.popBackStack()
                                     },
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
+                                    modifier = composableModifier
                                 )
                             } else {
                                 LoadingComponent(modifier = Modifier.fillMaxSize())
@@ -308,7 +312,7 @@ class MainActivity : ComponentActivity() {
                                         appStartViewModel.handleIntent(intent = AppStartIntent.PopItemTypeBackStack)
                                         navController.popBackStack()
                                     },
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
+                                    modifier = composableModifier
                                 )
                             } else {
                                 LoadingComponent(modifier = Modifier.fillMaxSize())
