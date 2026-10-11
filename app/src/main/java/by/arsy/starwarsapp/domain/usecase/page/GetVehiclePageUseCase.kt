@@ -7,8 +7,8 @@ class GetVehiclePageUseCase(
     private val starWarsRepository: StarWarsRepository
 ) {
 
-    suspend fun execute(page: Int): VehiclePage {
-        return starWarsRepository.getVehiclePage(page = page)
+    suspend fun execute(pageNumber: Int): VehiclePage {
+        return starWarsRepository.getVehiclePage(page = pageNumber)
     }
 
 }

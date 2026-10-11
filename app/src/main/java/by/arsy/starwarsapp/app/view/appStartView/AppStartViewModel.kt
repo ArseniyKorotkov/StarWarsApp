@@ -44,10 +44,7 @@ class AppStartViewModel @Inject constructor(
 
     init {
         handleIntent(
-            intent = AppStartIntent.DownloadPage(
-                page = 1,
-                type = _appStartState.value.currentPageType
-            )
+            intent = AppStartIntent.DownloadNextPage
         )
     }
 
@@ -57,12 +54,11 @@ class AppStartViewModel @Inject constructor(
                 itemId = intent.id,
                 type = intent.type
             )
-            is AppStartIntent.DownloadPage -> {
-                downloadPageItems(
-                    page = intent.page,
-                    type = intent.type
-                )
+            is AppStartIntent.DownloadNextPage -> {
+                downloadNextPageItems()
             }
+
+            is AppStartIntent.OpenPage -> openPage(type = intent.type)
 
             AppStartIntent.PopItemTypeBackStack -> _appStartState.value.itemBackStack.removeLastOrNull()
         }
@@ -93,34 +89,126 @@ class AppStartViewModel @Inject constructor(
         }
     }
 
-    private fun downloadPageItems(
-        page: Int,
-        type: ItemType
-    ) {
+    private fun downloadNextPageItems() {
         _appStartState.value = _appStartState.value.copy(
             isCurrentPageLoaded = false
         )
 
         viewModelScope.launch(context = Dispatchers.IO) {
             try {
-                val pageContent = when (type) {
-                    ItemType.Film -> getFilmPageUseCase.execute(page = page).results
-                    ItemType.Person -> getPersonPageUseCase.execute(page = page).results
-                    ItemType.Planet -> getPlanetPageUseCase.execute(page = page).results
-                    ItemType.Specie -> getSpeciePageUseCase.execute(page = page).results
-                    ItemType.Starship -> getStarshipPageUseCase.execute(page = page).results
-                    ItemType.Vehicle -> getVehiclePageUseCase.execute(page = page).results
+                when (_appStartState.value.currentPageType) {
+                    ItemType.Film -> {
+                        val pageState = _appStartState.value.filmPageState
+                        if (pageState.isPageLast) return@launch
+                        val nextPageNumber = pageState.pageNumber + 1
+                        val page = getFilmPageUseCase.execute(pageNumber = nextPageNumber)
+                        val newState = PageState(
+                            items = pageState.items + page.results,
+                            pageNumber = nextPageNumber,
+                            isPageLast = page.next == null
+                        )
+                        _appStartState.value = _appStartState.value.copy(
+                            filmPageState = newState,
+                            currentPageState = newState,
+                        )
+                    }
+                    ItemType.Person -> {
+                        val pageState = _appStartState.value.personPageState
+                        if (pageState.isPageLast) return@launch
+                        val nextPageNumber = pageState.pageNumber + 1
+                        val page = getPersonPageUseCase.execute(pageNumber = nextPageNumber)
+                        val newState = PageState(
+                            items = pageState.items + page.results,
+                            pageNumber = nextPageNumber,
+                            isPageLast = page.next == null
+                        )
+                        _appStartState.value = _appStartState.value.copy(
+                            personPageState = newState,
+                            currentPageState = newState,
+                        )
+                    }
+                    ItemType.Planet -> {
+                        val pageState = _appStartState.value.planetPageState
+                        if (pageState.isPageLast) return@launch
+                        val nextPageNumber = pageState.pageNumber + 1
+                        val page = getPlanetPageUseCase.execute(pageNumber = nextPageNumber)
+                        val newState = PageState(
+                            items = pageState.items + page.results,
+                            pageNumber = nextPageNumber,
+                            isPageLast = page.next == null
+                        )
+                        _appStartState.value = _appStartState.value.copy(
+                            planetPageState = newState,
+                            currentPageState = newState,
+                        )
+                    }
+                    ItemType.Specie -> {
+                        val pageState = _appStartState.value.speciePageState
+                        if (pageState.isPageLast) return@launch
+                        val nextPageNumber = pageState.pageNumber + 1
+                        val page = getSpeciePageUseCase.execute(pageNumber = nextPageNumber)
+                        val newState = PageState(
+                            items = pageState.items + page.results,
+                            pageNumber = nextPageNumber,
+                            isPageLast = page.next == null
+                        )
+                        _appStartState.value = _appStartState.value.copy(
+                            speciePageState = newState,
+                            currentPageState = newState,
+                        )
+                    }
+                    ItemType.Starship -> {
+                        val pageState = _appStartState.value.starshipPageState
+                        if (pageState.isPageLast) return@launch
+                        val nextPageNumber = pageState.pageNumber + 1
+                        val page = getStarshipPageUseCase.execute(pageNumber = nextPageNumber)
+                        val newState = PageState(
+                            items = pageState.items + page.results,
+                            pageNumber = nextPageNumber,
+                            isPageLast = page.next == null
+                        )
+                        _appStartState.value = _appStartState.value.copy(
+                            starshipPageState = newState,
+                            currentPageState = newState,
+                        )
+                    }
+                    ItemType.Vehicle -> {
+                        val pageState = _appStartState.value.vehiclePageState
+                        if (pageState.isPageLast) return@launch
+                        val nextPageNumber = pageState.pageNumber + 1
+                        val page = getVehiclePageUseCase.execute(pageNumber = nextPageNumber)
+                        val newState = PageState(
+                            items = pageState.items + page.results,
+                            pageNumber = nextPageNumber,
+                            isPageLast = page.next == null
+                        )
+                        _appStartState.value = _appStartState.value.copy(
+                            vehiclePageState = newState,
+                            currentPageState = newState,
+                        )
+                    }
                 }
-
-                _appStartState.value = _appStartState.value.copy(
-                    currentPageType = type,
-                    currentPage = pageContent,
-                    isCurrentPageLoaded = true
-                )
             } catch (e: Exception) {
                 Log.e("AppStartViewModel", e.message, e)
             }
         }
+    }
+
+    private fun openPage(
+        type: ItemType
+    ) {
+        val currentPage =  when(type) {
+            ItemType.Film -> _appStartState.value.filmPageState
+            ItemType.Person -> _appStartState.value.personPageState
+            ItemType.Planet -> _appStartState.value.planetPageState
+            ItemType.Specie -> _appStartState.value.speciePageState
+            ItemType.Starship -> _appStartState.value.starshipPageState
+            ItemType.Vehicle -> _appStartState.value.vehiclePageState
+        }
+        _appStartState.value = _appStartState.value.copy(
+            currentPageType = type,
+            currentPageState = currentPage,
+        )
     }
 
 

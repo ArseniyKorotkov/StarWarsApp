@@ -7,10 +7,11 @@ sealed interface AppStartIntent {
         val type: AppStartViewModel.ItemType
     ) : AppStartIntent
 
-    class DownloadPage(
-        val page: Int,
+    object DownloadNextPage : AppStartIntent
+
+    class OpenPage(
         val type: AppStartViewModel.ItemType
     ) : AppStartIntent
 
-    data object PopItemTypeBackStack : AppStartIntent
+    object PopItemTypeBackStack : AppStartIntent
 }

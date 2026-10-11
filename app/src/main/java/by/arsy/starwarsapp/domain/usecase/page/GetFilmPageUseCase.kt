@@ -7,8 +7,8 @@ class GetFilmPageUseCase(
     private val starWarsRepository: StarWarsRepository
 ) {
 
-    suspend fun execute(page: Int): FilmPage {
-        return starWarsRepository.getFilmPage(page = page)
+    suspend fun execute(pageNumber: Int): FilmPage {
+        return starWarsRepository.getFilmPage(page = pageNumber)
     }
 
 }

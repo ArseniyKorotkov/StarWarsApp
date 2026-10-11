@@ -60,15 +60,14 @@ class MainActivity : ComponentActivity() {
                                 onItemTypeClick = {
                                     val type = AppStartViewModel.ItemType.valueOf(it)
                                     appStartViewModel.handleIntent(
-                                        AppStartIntent.DownloadPage(
-                                            page = 1,
+                                        AppStartIntent.OpenPage(
                                             type = type
                                         )
                                     )
                                 },
-                                itemIdList = appStartState.currentPage.map { it.id },
+                                itemIdList = appStartState.currentPageState.items.map { it.id },
                                 getItemName = { id ->
-                                    appStartState.currentPage.first { it.id == id }.name
+                                    appStartState.currentPageState.items.first { it.id == id }.name
                                 },
                                 onItemNameClick = {
                                     navigateItem(
@@ -77,6 +76,7 @@ class MainActivity : ComponentActivity() {
                                         navController = navController
                                     )
                                 },
+                                viewModel = appStartViewModel,
                                 modifier = Modifier.padding(paddingValues = innerPadding)
                             )
                         }

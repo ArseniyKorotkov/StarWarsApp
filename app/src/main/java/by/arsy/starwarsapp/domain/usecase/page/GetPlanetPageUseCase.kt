@@ -7,8 +7,8 @@ class GetPlanetPageUseCase(
     private val starWarsRepository: StarWarsRepository
 ) {
 
-    suspend fun execute(page: Int): PlanetPage {
-        return starWarsRepository.getPlanetPage(page = page)
+    suspend fun execute(pageNumber: Int): PlanetPage {
+        return starWarsRepository.getPlanetPage(page = pageNumber)
     }
 
 }

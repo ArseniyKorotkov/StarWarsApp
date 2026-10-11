@@ -7,8 +7,8 @@ class GetPersonPageUseCase(
     private val starWarsRepository: StarWarsRepository
 ) {
 
-    suspend fun execute(page: Int): PersonPage {
-        return starWarsRepository.getPersonPage(page = page)
+    suspend fun execute(pageNumber: Int): PersonPage {
+        return starWarsRepository.getPersonPage(page = pageNumber)
     }
 
 }

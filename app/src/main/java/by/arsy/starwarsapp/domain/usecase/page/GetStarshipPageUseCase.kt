@@ -7,8 +7,8 @@ class GetStarshipPageUseCase(
     private val starWarsRepository: StarWarsRepository
 ) {
 
-    suspend fun execute(page: Int): StarshipPage {
-        return starWarsRepository.getStarshipPage(page = page)
+    suspend fun execute(pageNumber: Int): StarshipPage {
+        return starWarsRepository.getStarshipPage(page = pageNumber)
     }
 
 }

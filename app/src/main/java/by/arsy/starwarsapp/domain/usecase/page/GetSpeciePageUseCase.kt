@@ -7,8 +7,8 @@ class GetSpeciePageUseCase(
     private val starWarsRepository: StarWarsRepository
 ) {
 
-    suspend fun execute(page: Int): SpeciePage {
-        return starWarsRepository.getSpeciePage(page = page)
+    suspend fun execute(pageNumber: Int): SpeciePage {
+        return starWarsRepository.getSpeciePage(page = pageNumber)
     }
 
 }
