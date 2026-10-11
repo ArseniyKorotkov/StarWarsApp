@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import by.arsy.starwarsapp.R
+import by.arsy.starwarsapp.app.view.appStartView.component.LoadingComponent
 
 @Composable
 fun Dropdown(
@@ -76,12 +77,12 @@ fun Dropdown(
             enter = expandVertically(),
             exit = shrinkVertically()
         ) {
-            if (isLoadedState) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 18.dp)
-                ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 18.dp)
+            ) {
+                if (isLoadedState) {
                     variables.forEach {
                         Text(
                             text = variableText.invoke(it),
@@ -90,12 +91,11 @@ fun Dropdown(
                                 .clickable { onItemClick.invoke(it) }
                         )
                     }
+                } else {
+                    LoadingComponent()
                 }
-            } else {
-                Text("Loading...")
             }
         }
-
     }
 }
 

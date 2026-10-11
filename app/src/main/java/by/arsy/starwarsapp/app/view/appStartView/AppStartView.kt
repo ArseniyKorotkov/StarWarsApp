@@ -20,6 +20,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import by.arsy.starwarsapp.app.view.appStartView.component.LoadingComponent
 
 @Composable
 fun AppStartView(
@@ -80,7 +81,7 @@ fun AppStartView(
 
             item {
                 if (!appStartState.currentPageState.isPageLast) {
-                    Text(text = "Loading items...")
+                    LoadingComponent(modifier = Modifier.fillMaxWidth())
                 }
             }
         }

@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import by.arsy.starwarsapp.app.view.appStartView.AppStartIntent
 import by.arsy.starwarsapp.app.view.appStartView.AppStartView
 import by.arsy.starwarsapp.app.view.appStartView.AppStartViewModel
+import by.arsy.starwarsapp.app.view.appStartView.component.LoadingComponent
 import by.arsy.starwarsapp.app.view.itemView.filmView.FilmScreen
 import by.arsy.starwarsapp.app.view.itemView.personView.PersonScreen
 import by.arsy.starwarsapp.app.view.itemView.planetView.PlanetScreen
@@ -131,10 +132,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
-                                Text(
-                                    text = "Loading...",
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
-                                )
+                                LoadingComponent(modifier = Modifier.fillMaxSize())
                             }
                         }
 
@@ -181,10 +179,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
-                                Text(
-                                    text = "Loading...",
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
-                                )
+                                LoadingComponent(modifier = Modifier.fillMaxSize())
                             }
                         }
 
@@ -217,10 +212,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
-                                Text(
-                                    text = "Loading...",
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
-                                )
+                                LoadingComponent(modifier = Modifier.fillMaxSize())
                             }
                         }
 
@@ -253,10 +245,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
-                                Text(
-                                    text = "Loading...",
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
-                                )
+                                LoadingComponent(modifier = Modifier.fillMaxSize())
                             }
                         }
 
@@ -289,10 +278,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
-                                Text(
-                                    text = "Loading...",
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
-                                )
+                                LoadingComponent(modifier = Modifier.fillMaxSize())
                             }
                         }
 
@@ -325,10 +311,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.padding(paddingValues = innerPadding)
                                 )
                             } else {
-                                Text(
-                                    text = "Loading...",
-                                    modifier = Modifier.padding(paddingValues = innerPadding)
-                                )
+                                LoadingComponent(modifier = Modifier.fillMaxSize())
                             }
                         }
                     }
