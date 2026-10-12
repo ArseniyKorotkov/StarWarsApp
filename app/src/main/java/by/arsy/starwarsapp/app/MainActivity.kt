@@ -5,9 +5,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -16,6 +19,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import by.arsy.starwarsapp.app.view.appStartView.AppStartIntent
 import by.arsy.starwarsapp.app.view.appStartView.AppStartScreen
@@ -36,10 +40,13 @@ import by.arsy.starwarsapp.domain.model.item.Vehicle
 import by.arsy.starwarsapp.ui.theme.StarWarsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-const val ITEM_ID = "item_id"
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        private const val ITEM_ID = "item_id"
+        private const val START_DESTINATION = "startView"
+    }
     val appStartViewModel: AppStartViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,18 +55,32 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val appStartState by appStartViewModel.appStartState.collectAsState()
+            val currentRoute by navController.currentBackStackEntryAsState()
 
             StarWarsAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    floatingActionButton = {
+                        AnimatedVisibility(
+                            visible = currentRoute?.destination?.route != START_DESTINATION
+                        ) {
+                            Button(
+                                onClick = { navController.navigate(route = START_DESTINATION) }
+                            ) {
+                                Text(text = "HOME")
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
                     val composableModifier = Modifier
                         .padding(paddingValues = innerPadding)
                         .padding(horizontal = 8.dp)
 
                     NavHost(
                         navController = navController,
-                        startDestination = "startView"
+                        startDestination = START_DESTINATION
                     ) {
-                        composable("startView") {
+                        composable(route = START_DESTINATION) {
                             AppStartScreen(
                                 itemTypeList = AppStartViewModel.ItemType.entries.map { it.name },
                                 onItemTypeClick = {
