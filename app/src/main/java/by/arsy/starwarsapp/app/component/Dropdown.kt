@@ -19,7 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,7 +65,9 @@ fun Dropdown(
                     painter = painterResource(id = R.drawable.down_arrow),
                     contentDescription = null,
                     modifier = Modifier
-                        .rotate(degrees)
+                        .graphicsLayer {
+                            rotationZ = degrees
+                        }
                         .size(30.dp)
                 )
             }
