@@ -16,7 +16,6 @@ import by.arsy.starwarsapp.domain.usecase.page.GetSpeciePageUseCase
 import by.arsy.starwarsapp.domain.usecase.page.GetStarshipPageUseCase
 import by.arsy.starwarsapp.domain.usecase.page.GetVehiclePageUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -72,7 +71,7 @@ class AppStartViewModel @Inject constructor(
             isCurrentItemLoaded = false
         )
 
-        viewModelScope.launch(context = Dispatchers.IO) {
+        viewModelScope.launch {
             val item = when (type) {
                 ItemType.Film -> getFilmUseCase.execute(id = itemId)
                 ItemType.Person -> getPersonUseCase.execute(id = itemId)
@@ -94,7 +93,7 @@ class AppStartViewModel @Inject constructor(
             isCurrentPageLoaded = false
         )
 
-        viewModelScope.launch(context = Dispatchers.IO) {
+        viewModelScope.launch {
             try {
                 when (_appStartState.value.currentPageType) {
                     ItemType.Film -> {

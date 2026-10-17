@@ -13,7 +13,7 @@ fun <T : Item> ViewModel.getDetails(
     onGetDetail: suspend (Int) -> T,
     onUpdateState: (List<T>) -> Unit
 ) {
-    viewModelScope.launch(Dispatchers.IO) {
+    viewModelScope.launch {
         val details = detailIdList?.map {
            async { onGetDetail(it)}
         }?.awaitAll() ?: emptyList()
